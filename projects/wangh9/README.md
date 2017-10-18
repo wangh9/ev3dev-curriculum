@@ -1,1 +1,1 @@
-This folder cotains Heda Wang's project
+This folder contains Heda Wang's project
