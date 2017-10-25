@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!python
 """
 Drives the EV3 in a square (the accuracy of the 90 degree turns will vary by surface type).
 Demo video: https://goo.gl/photos/vrrSnLUvx8mSGCvZ6
