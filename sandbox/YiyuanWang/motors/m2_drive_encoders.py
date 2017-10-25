@@ -4,13 +4,47 @@ This module lets you practice using the encoder to determine distances while blo
 
 You will now use a run_to_rel_pos command to implement the action drive inches action.
 
-Authors: David Fisher and PUT_YOUR_NAME_HERE.
-"""  # TODO: 1. PUT YOUR NAME IN THE ABOVE LINE.
+Authors: David Fisher and yiyuan wang.
+"""  # done: 1. PUT YOUR NAME IN THE ABOVE LINE.
+import ev3dev.ev3 as ev3
+import math
+import time
 
 # TODO: 2. Copy the contents of your m1_drive_timed.py and paste that text into this file below these comments.
 #   If your program says and prints anything at the start change it to print and say "Drive using encoders"
+print("--------------------------------------------")
+print("  Timed Driving")
+print("--------------------------------------------")
+# Connect two large motors on output ports B and C
+left_motor = ev3.LargeMotor(ev3.OUTPUT_B)
+right_motor = ev3.LargeMotor(ev3.OUTPUT_C)
 
-# TODO: 3. Add a beep after the drive motors stop (see code below).  Test your code to hear the beep AFTER movement.
+    # Check that the motors are actually connected
+assert left_motor.connected
+assert right_motor.connected
+
+time_s = 1  # Any value other than 0.
+while time_s != 0:
+        # left_sp = int(input("Enter a speed for the left motor (0 to 900 dps): "))
+        # right_sp = int(input("Enter a speed for the right motor (0 to 900 dps): "))
+        enter_sp = int(input("Enter a speed for the car (0 to 900 dps): "))
+        if enter_sp ==0:
+            break
+        distance_travel = int(input("Enter a distance to travel(inches): "))
+        if distance_travel == 0:
+            break
+        left_motor.run_forever(speed_sp=enter_sp)
+        right_motor.run_forever(speed_sp=enter_sp)
+        time_s = distance_travel /(1.3*math.pi* enter_sp / 360 + 0)
+        time.sleep(time_s)
+        left_motor.stop()
+        ev3.Sound.beep().wait()
+        right_motor.stop(stop_action="brake")
+
+print("Goodbye!")
+ev3.Sound.speak("Goodbye").wait()
+
+# done: 3. Add a beep after the drive motors stop (see code below).  Test your code to hear the beep AFTER movement.
 #   ev3.Sound.beep().wait()
 
 # TODO: 4. Instead of using the run_forever, time.sleep, stop pattern switch to using the run_to_rel_pos command.
