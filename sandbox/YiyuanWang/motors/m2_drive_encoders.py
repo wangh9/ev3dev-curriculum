@@ -33,11 +33,10 @@ while time_s != 0:
         distance_travel = int(input("Enter a distance to travel(inches): "))
         if distance_travel == 0:
             break
-        left_motor.run_forever(speed_sp=enter_sp)
-        right_motor.run_forever(speed_sp=enter_sp)
-        time_s = distance_travel /(1.3*math.pi* enter_sp / 360 + 0)
-        time.sleep(time_s)
-        left_motor.stop()
+        left_motor.run_to_rel_pos(position_sp=90*distance_travel,speed_sp=enter_sp)
+        right_motor.run_to_rel_pos(position_sp=90*distance_travel,speed_sp=enter_sp)
+        left_motor.wait_while(ev3.Motor.STATE_RUNNING)
+        right_motor.wait_while(ev3.Motor.STATE_RUNNING)
         ev3.Sound.beep().wait()
         right_motor.stop(stop_action="brake")
 
@@ -47,7 +46,7 @@ ev3.Sound.speak("Goodbye").wait()
 # done: 3. Add a beep after the drive motors stop (see code below).  Test your code to hear the beep AFTER movement.
 #   ev3.Sound.beep().wait()
 
-# TODO: 4. Instead of using the run_forever, time.sleep, stop pattern switch to using the run_to_rel_pos command.
+# done: 4. Instead of using the run_forever, time.sleep, stop pattern switch to using the run_to_rel_pos command.
 #   You will need to determine the position_sp value to pass into the run_to_rel_pos command as a named argument.
 #   Assume the diameter of the wheel is 1.3" (close enough).  A 1.3" diameter wheel results in approximately a 4"
 #     circumference, so 360 degrees = 4 inches of travel.
@@ -63,9 +62,9 @@ ev3.Sound.speak("Goodbye").wait()
 #        -- speed_sp
 #        -- stop_action
 
-# TODO: 5. Make sure the beep happens AFTER the motors stop.  Use the wait_while command to block code execution.
+# done: 5. Make sure the beep happens AFTER the motors stop.  Use the wait_while command to block code execution.
 
-# TODO: 6. Formally test your work. When you think you have the problem complete run these tests:
+# done: 6. Formally test your work. When you think you have the problem complete run these tests:
 #   200 dps 24 inches (make sure it drives within 2 inches of the target distance)
 #   400 dps 24 inches (make sure it drives within 2 inches of the target distance)
 #   800 dps 24 inches (make sure it drives within 2 inches of the target distance)
