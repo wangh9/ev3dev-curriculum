@@ -18,9 +18,9 @@ import time
 
 class Snatch3r(object):
     """Commands for the Snatch3r robot that might be useful in many different programs."""
-    
 
     def drive_inches(self,lenth,velocity):
+        """"""
         if lenth < 0:
             velocity = - velocity
 
@@ -32,7 +32,6 @@ class Snatch3r(object):
         time.sleep(time_s)
         left_motor.stop()
         right_motor.stop(stop_action="brake")
-
 
     def turn_degrees(self, degrees_to_turn, turn_speed_sp):
         left_motor = ev3.LargeMotor(ev3.OUTPUT_B)
