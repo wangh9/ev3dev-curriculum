@@ -19,5 +19,25 @@ import time
 class Snatch3r(object):
     """Commands for the Snatch3r robot that might be useful in many different programs."""
     
-    # TODO: Implement the Snatch3r class as needed when working the sandox exercises
-    # (and delete these comments)
+
+
+def drive_inches(self,lenth,velocity):
+    left_motor = ev3.LargeMotor(ev3.OUTPUT_B)
+    right_motor = ev3.LargeMotor(ev3.OUTPUT_C)
+
+    # Check that the motors are actually connected
+    assert left_motor.connected
+    assert right_motor.connected
+
+    time_s = 1  # Any value other than 0.
+    while time_s != 0:
+        if lenth == 0:
+            break
+        if velocity == 0:
+            break
+        left_motor.run_forever(speed_sp=velocity)
+        right_motor.run_forever(speed_sp=velocity)
+        time_s = lenth / (1.3 * math.pi * velocity / 360 + 0)
+        time.sleep(time_s)
+        left_motor.stop()
+        right_motor.stop(stop_action="brake")
