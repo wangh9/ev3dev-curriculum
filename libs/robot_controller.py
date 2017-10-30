@@ -20,7 +20,7 @@ class Snatch3r(object):
     """Commands for the Snatch3r robot that might be useful in many different programs."""
 
     def drive_inches(self,lenth,velocity):
-        """"""
+        """  """
         if lenth < 0:
             velocity = - velocity
 
@@ -42,7 +42,7 @@ class Snatch3r(object):
         left_motor.wait_while(ev3.Motor.STATE_RUNNING)
         ev3.Sound.beep().wait()
 
-    def arm_up(self,arm_motor, touch_sensor):
+    def arm_up(self, arm_motor, touch_sensor):
         """
         Moves the Snatch3r arm to the up position.
 
@@ -116,3 +116,4 @@ class Snatch3r(object):
         arm_motor.wait_while(ev3.Motor.STATE_RUNNING)
         ev3.Sound.beep()
         arm_motor.position = 0
+#todo : add shut down

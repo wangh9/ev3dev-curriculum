@@ -126,7 +126,7 @@ def main():
         #   Press Down - Both LEDs are Red (the cycle repeats)
         #   Press Back - Both LEDs turn Green, the robot says Goodbye and the program exits
 
-        # TODO: 6. Call over a TA or instructor to sign your team's checkoff sheet and do a code review.
+        # DONE: 6. Call over a TA or instructor to sign your team's checkoff sheet and do a code review.
         #
         # Observation you should make, working with buttons as 'states' is functional but usually 'events' work better.
         # Also observe that we don't use the Enter button.  Enter can cause issues since your program is running at the
