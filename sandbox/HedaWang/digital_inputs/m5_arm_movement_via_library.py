@@ -7,7 +7,7 @@ This module will work exactly the same as the prior module but will do that work
 Authors: David Fisher and Heda Wang.
 """  # DONE: 1. PUT YOUR NAME IN THE ABOVE LINE.
 
-# TODO: 2. Have everyone talk about this problem together then pick one team member to modify libs/robot_controller.py
+# DONE: 2. Have everyone talk about this problem together then pick one team member to modify libs/robot_controller.py
 # as necessary to make the code below perform the same task as the prior module. Once the code has been tested and shown
 # to work, then have that person commit their work.  All other team members need to do a VCS --> Update project...
 # Once the library is implemented each team member should be able to run their version of this code on the robot.
@@ -31,18 +31,23 @@ def main():
     print("--------------------------------------------")
     ev3.Sound.speak("Arm movement via library").wait()
     robot = robo.Snatch3r()
+    arm_motor = ev3.MediumMotor(ev3.OUTPUT_A)
+    assert arm_motor.connected
+
+    touch_sensor = ev3.TouchSensor()
+    assert touch_sensor
 
     while True:
         command_to_run = input("Enter c (for calibrate), u (for up), d (for down), or q (for quit): ")
         if command_to_run == 'c':
             print("Calibrate the arm")
-            robot.arm_calibration()
+            robot.arm_calibration(arm_motor,touch_sensor)
         elif command_to_run == 'u':
             print("Move the arm to the up position")
-            robot.arm_up()
+            robot.arm_up(arm_motor, touch_sensor)
         elif command_to_run == 'd':
             print("Move the arm to the down position")
-            robot.arm_down()
+            robot.arm_down(arm_motor)
         elif command_to_run == 'q':
             break
         else:
