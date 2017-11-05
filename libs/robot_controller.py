@@ -28,6 +28,7 @@ class Snatch3r(object):
         assert self.color_sensor
         self.ir_sensor = ev3.InfraredSensor()
         assert self.ir_sensor
+        self.beacon_seeker = ev3.InfraredSensor(channel=1)
         
     def drive_inches(self,lenth,velocity):
         """  """
