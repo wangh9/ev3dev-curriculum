@@ -9,14 +9,14 @@ function gets the robot to that location it will stop the robot and return.  Wit
 prompted if they want to find the beacon again (presumably you move it first) or quit.
 
 
-Authors: David Fisher and PUT_YOUR_NAME_HERE.
-"""  # TODO: 1. PUT YOUR NAME IN THE ABOVE LINE.
+Authors: David Fisher and yiyuan bob wang.
+"""  # done: 1. PUT YOUR NAME IN THE ABOVE LINE.
 import traceback
 
 import ev3dev.ev3 as ev3
 import time
 import math
-
+touch_sensor = ev3.TouchSensor()
 import robot_controller as robo
 
 
@@ -57,16 +57,16 @@ def seek_beacon(robot):
     """
 
     # TODO: 2. Create a BeaconSeeker object on channel 1.
-
+    # beacon_seeker = ev3.InfraredSensor(channel=1)
     forward_speed = 300
     turn_speed = 100
 
-    while not robot.touch_sensor.is_pressed:
+    while not touch_sensor.is_pressed:
         # The touch sensor can be used to abort the attempt (sometimes handy during testing)
 
         # TODO: 3. Use the beacon_seeker object to get the current heading and distance.
-        current_heading = 0  # use the beacon_seeker heading
-        current_distance = 0  # use the beacon_seeker distance
+        current_heading = robot.beacon_seeker.heading # use the beacon_seeker heading
+        current_distance = robot.beacon_seeker.distance # use the beacon_seeker distance
         if current_distance == -128:
             # If the IR Remote is not found just sit idle for this program until it is moved.
             print("IR Remote not found. Distance is -128")
@@ -93,6 +93,17 @@ def seek_beacon(robot):
                 # Close enough of a heading to move forward
                 print("On the right heading. Distance: ", current_distance)
                 # You add more!
+                while(current_distance > 0):
+                    robot.forward(forward_speed,forward_speed)
+                if current_distance == 0:
+                    return True
+
+            if math.fabs(current_heading) > 2 and math.fabs(current_heading) < 10:
+                while(current_distance > 0):
+                    robot.forward(forward_speed,forward_speed)
+                if current_distance == 0:
+                    return True
+
 
 
 
