@@ -130,6 +130,6 @@ class Snatch3r(object):
         # The most important part of this method is given here, but you should add a bit more to stop motors, etc.
         self.running = False
 
-    def ir_sensor(self):
+    def  ir_sensor(self):
         self.ir_sensor = ev3.InfraredSensor()
         assert self.ir_sensor
