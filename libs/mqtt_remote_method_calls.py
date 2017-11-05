@@ -147,6 +147,7 @@ class MqttClient(object):
         self.subscription_topic_name = None
         self.publish_topic_name = None
 
+
     def connect_to_ev3(self, mqtt_broker_ip_address="mosquitto.csse.rose-hulman.edu", lego_robot_number=LEGO_NUMBER):
         """
         Code running on the PC should use this command to connect to the EV3 robot.
