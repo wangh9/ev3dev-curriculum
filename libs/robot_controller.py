@@ -18,7 +18,6 @@ import time
 
 class Snatch3r(object):
     """Commands for the Snatch3r robot that might be useful in many different programs."""
-
     def drive_inches(self,lenth,velocity):
         """  """
         if lenth < 0:
@@ -130,3 +129,7 @@ class Snatch3r(object):
         # Modify a variable that will allow the loop_forever method to end. Additionally stop motors and set LEDs green.
         # The most important part of this method is given here, but you should add a bit more to stop motors, etc.
         self.running = False
+
+    def  ir_sensor(self):
+        self.ir_sensor = ev3.InfraredSensor()
+        assert self.ir_sensor
