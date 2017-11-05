@@ -28,7 +28,6 @@ class Snatch3r(object):
         assert self.color_sensor
         self.ir_sensor = ev3.InfraredSensor()
         assert self.ir_sensor
-        self.beacon_seeker = ev3.InfraredSensor(channel=1)
         self.pixy = ev3.Sensor(driver_name="pixy-lego")
         assert self.pixy
 
@@ -115,3 +114,45 @@ class Snatch3r(object):
     def back(self, leftspeed, rightspeed):
         left_motor.run_forever(speed_sp=leftspeed)
         right_motor.run_forever(speed_sp=rightspeed)
+
+    def seek_beacon(self):
+        beacon_seeker = ev3.BeaconSeeker(channel=1)
+        forward_speed = 300
+        turn_speed = 100
+
+        while not touch_sensor.is_pressed:
+
+            current_heading = beacon_seeker.heading  # use the beacon_seeker heading
+            current_distance = beacon_seeker.distance  # use the beacon_seeker distance
+            if current_distance == -128:
+                # If the IR Remote is not found just sit idle for this program until it is moved.
+                print("IR Remote not found. Distance is -128")
+                self.stop()
+            else:
+                if math.fabs(current_heading) > 2 and math.fabs(current_heading) < 10:
+                    print("start finding!", current_heading)
+                    if (current_heading > 2):
+                        self.forward(turn_speed, -turn_speed)
+                    if (current_heading < -2):
+                        self.forward(-turn_speed, turn_speed)
+                if math.fabs(current_heading) > 10:
+                    print("Heading too far off", current_heading)
+                    self.stop()
+
+                if math.fabs(current_heading) < 2:
+                    # Close enough of a heading to move forward
+                    print("On the right heading. Distance: ", current_distance)
+                    # You add more!
+                    if (current_distance > 0):
+                        self.forward(forward_speed, forward_speed)
+                    if current_distance == 0:
+                        self.forward(forward_speed, forward_speed)
+                        time.sleep(0.8)
+                        self.stop()
+                        return True
+            time.sleep(0.2)
+
+        # The touch_sensor was pressed to abort the attempt if this code runs.
+        print("Abandon ship!")
+        self.stop()
+        return False
