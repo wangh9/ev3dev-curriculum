@@ -18,6 +18,11 @@ import time
 
 class Snatch3r(object):
     """Commands for the Snatch3r robot that might be useful in many different programs."""
+    def __init__(self):
+        self.color_sensor = ev3.ColorSensor()
+        assert self.color_sensor
+
+
     def drive_inches(self,lenth,velocity):
         """  """
         if lenth < 0:
