@@ -32,7 +32,7 @@ class Snatch3r(object):
         self.pixy = ev3.Sensor(driver_name="pixy-lego")
         assert self.pixy
 
-        
+
     def drive_inches(self,lenth,velocity):
         """  """
         if lenth < 0:
