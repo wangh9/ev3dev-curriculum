@@ -188,3 +188,17 @@ class Snatch3r(object):
             # to the color seen and that value is given to you as an int.
 
             ev3.Sound.speak("Found " + COLOR_NAMES[color_to_seek]).wait()
+
+    def find_the_target(self,code,state1,state2,state3):
+        while code == 8147:
+            if state1 == True and state2 == False and state3 == False:
+                print("go to Olin")
+                ev3.Sound.speak("Olin it is").wait()
+
+            if state1 == False and state2 == True and state3 == False:
+                print("go to Monech")
+                ev3.Sound.speak("Monech it is").wait()
+
+            if state1 == False and state2 == False and state3 == True:
+                print("go to Library")
+                ev3.Sound.speak("library it is").wait()
