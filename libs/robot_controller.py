@@ -195,9 +195,10 @@ class Snatch3r(object):
             if state1 == True and state2 == False and state3 == False:
                 print("go to Olin")
                 ev3.Sound.speak("Olin it is").wait()
+                time.sleep(1)
                 left_motor.run_forever(speed_sp=600)
                 right_motor.run_forever(speed_sp=600)
-                while (color_sensor.color != 'red'):
+                while (color_sensor.color != "Red"):
                     time.sleep(0.01)
                 left_motor.stop(stop_action=ev3.Motor.STOP_ACTION_BRAKE)
                 right_motor.stop(stop_action=ev3.Motor.STOP_ACTION_BRAKE)
