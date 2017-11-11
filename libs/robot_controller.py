@@ -158,16 +158,7 @@ class Snatch3r(object):
         self.stop()
         return False
 
-    def drive_to_color(button_state, robot, color_to_seek):
-        """
-        When the button_state is True (pressed), drives the robot forward until the desired color is detected.
-        When the color_to_seek is detected the robot stops moving forward and speaks a message.
-
-        Type hints:
-          :type button_state: bool
-          :type robot: robo.Snatch3r
-          :type color_to_seek: int
-        """
+    def drive_to_color(self,button_state, robot, color_to_seek):
         COLOR_NAMES = ["None", "Black", "Blue", "Green", "Yellow", "Red", "White", "Brown"]
         if button_state:
             ev3.Sound.speak("Seeking " + COLOR_NAMES[color_to_seek]).wait()
@@ -212,3 +203,18 @@ class Snatch3r(object):
                 ev3.Sound.speak("library it is").wait()
         else:
             ev3.Sound.speak("You are a Robot Bob").wait()
+
+    def find_beacon(self):
+        try:
+            while True:
+                found_beacon = self.seek_beacon()
+                if found_beacon:
+                    ev3.Sound.speak("I got the beacon")
+                    self.arm_up()
+                    time.sleep(1)
+                    break
+        except:
+            ev3.Sound.speak("Error")
+        self.drive_to_color(touch_sensor,self,5)
+        print("Goodbye!")
+

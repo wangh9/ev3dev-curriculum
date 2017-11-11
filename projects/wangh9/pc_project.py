@@ -2,13 +2,14 @@ import tkinter
 from tkinter import ttk
 
 import mqtt_remote_method_calls as com
-
+v = 0
 def main():
+
     mqtt_client = com.MqttClient()
     mqtt_client.connect_to_ev3()
     root = tkinter.Tk()
     root.title("Seller")
-
+    root.geometry("300x300+300+300")
     main_frame = ttk.Frame(root, padding=20, relief='raised')
     main_frame.grid()
 
@@ -77,8 +78,22 @@ def main():
     e_button.grid(row=6, column=2)
     e_button['command'] = (lambda: quit_program(mqtt_client, True))
 
+    r1 = ttk.Radiobutton(main_frame, text="drive", variable=v, value=1)
+    r1.grid(row=7,column=1)
+    r1['command'] = (lambda:say1(mqtt_client))
 
+    r2 = ttk.Radiobutton(main_frame, text="auto", variable=v, value=2)
+    r2.grid(row=7,column=2)
+    r2['command'] = (lambda: say2(mqtt_client))
     root.mainloop()
+
+
+def say1(mqtt_client):
+    mqtt_client.send_message('stop')
+
+
+def say2(mqtt_client):
+    mqtt_client.send_message('find_beacon')
 
 
 def some_callback1(mqtt_client,leftspeed,rightspeed):
