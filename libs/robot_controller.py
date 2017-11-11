@@ -28,7 +28,6 @@ class Snatch3r(object):
         assert self.color_sensor
         self.ir_sensor = ev3.InfraredSensor()
         assert self.ir_sensor
-        self.beacon_seeker = ev3.InfraredSensor(channel=1)
         self.pixy = ev3.Sensor(driver_name="pixy-lego")
         assert self.pixy
 
@@ -115,3 +114,77 @@ class Snatch3r(object):
     def back(self, leftspeed, rightspeed):
         left_motor.run_forever(speed_sp=leftspeed)
         right_motor.run_forever(speed_sp=rightspeed)
+
+    def seek_beacon(self):
+        beacon_seeker = ev3.BeaconSeeker(channel=1)
+        forward_speed = 300
+        turn_speed = 100
+
+        while not touch_sensor.is_pressed:
+
+            current_heading = beacon_seeker.heading  # use the beacon_seeker heading
+            current_distance = beacon_seeker.distance  # use the beacon_seeker distance
+            if current_distance == -128:
+                # If the IR Remote is not found just sit idle for this program until it is moved.
+                print("IR Remote not found. Distance is -128")
+                self.stop()
+            else:
+                if math.fabs(current_heading) > 2 and math.fabs(current_heading) < 10:
+                    print("start finding!", current_heading)
+                    if (current_heading > 2):
+                        self.forward(turn_speed, -turn_speed)
+                    if (current_heading < -2):
+                        self.forward(-turn_speed, turn_speed)
+                if math.fabs(current_heading) > 10:
+                    print("Heading too far off", current_heading)
+                    self.stop()
+
+                if math.fabs(current_heading) < 2:
+                    # Close enough of a heading to move forward
+                    print("On the right heading. Distance: ", current_distance)
+                    # You add more!
+                    if (current_distance > 0):
+                        self.forward(forward_speed, forward_speed)
+                    if current_distance == 0:
+                        self.forward(forward_speed, forward_speed)
+                        time.sleep(0.8)
+                        self.stop()
+                        return True
+            time.sleep(0.2)
+
+        # The touch_sensor was pressed to abort the attempt if this code runs.
+        print("Abandon ship!")
+        self.stop()
+        return False
+
+    def drive_to_color(button_state, robot, color_to_seek):
+        """
+        When the button_state is True (pressed), drives the robot forward until the desired color is detected.
+        When the color_to_seek is detected the robot stops moving forward and speaks a message.
+
+        Type hints:
+          :type button_state: bool
+          :type robot: robo.Snatch3r
+          :type color_to_seek: int
+        """
+        COLOR_NAMES = ["None", "Black", "Blue", "Green", "Yellow", "Red", "White", "Brown"]
+        if button_state:
+            ev3.Sound.speak("Seeking " + COLOR_NAMES[color_to_seek]).wait()
+            robot.forward(600, 600)
+            while (robot.color_sensor.color != color_to_seek):
+                time.sleep(0.01)
+            robot.stop()
+            # DONE: 3. Implement the task as stated in this module's initial comment block
+            # It is recommended that you add to your Snatch3r class's constructor the color_sensor, as shown
+            #   self.color_sensor = ev3.ColorSensor()
+            #   assert self.color_sensor
+            # Then here you can use a command like robot.color_sensor.color to check the value
+
+
+
+            # DONE: 4. Call over a TA or instructor to sign your team's checkoff sheet.
+            #
+            # Observations you should make, the instance variable robot.color_sensor.color is always updating
+            # to the color seen and that value is given to you as an int.
+
+            ev3.Sound.speak("Found " + COLOR_NAMES[color_to_seek]).wait()

@@ -56,8 +56,8 @@ def seek_beacon(robot):
       :rtype: bool
     """
 
-    # TODO: 2. Create a BeaconSeeker object on channel 1.
-    # beacon_seeker = ev3.InfraredSensor(channel=1)
+    # done: 2. Create a BeaconSeeker object on channel 1.
+    beacon_seeker = ev3.BeaconSeeker(channel=1)
     forward_speed = 300
     turn_speed = 100
 
@@ -65,8 +65,8 @@ def seek_beacon(robot):
         # The touch sensor can be used to abort the attempt (sometimes handy during testing)
 
         # TODO: 3. Use the beacon_seeker object to get the current heading and distance.
-        current_heading = robot.beacon_seeker.heading # use the beacon_seeker heading
-        current_distance = robot.beacon_seeker.distance # use the beacon_seeker distance
+        current_heading = beacon_seeker.heading # use the beacon_seeker heading
+        current_distance = beacon_seeker.distance # use the beacon_seeker distance
         if current_distance == -128:
             # If the IR Remote is not found just sit idle for this program until it is moved.
             print("IR Remote not found. Distance is -128")
@@ -89,19 +89,28 @@ def seek_beacon(robot):
             #    print("Heading is too far off to fix: ", current_heading)
 
             # Here is some code to help get you started
+
+
+            if math.fabs(current_heading) > 2 and math.fabs(current_heading) < 10:
+                print("start finding!",current_heading)
+                if(current_heading > 2):
+                    robot.forward(turn_speed, -turn_speed)
+                if(current_heading < -2):
+                    robot.forward(-turn_speed, turn_speed)
+            if math.fabs(current_heading) > 10:
+                print("Heading too far off",current_heading)
+                robot.stop()
+
             if math.fabs(current_heading) < 2:
                 # Close enough of a heading to move forward
                 print("On the right heading. Distance: ", current_distance)
                 # You add more!
-                while(current_distance > 0):
+                if(current_distance > 0):
                     robot.forward(forward_speed,forward_speed)
                 if current_distance == 0:
-                    return True
-
-            if math.fabs(current_heading) > 2 and math.fabs(current_heading) < 10:
-                while(current_distance > 0):
-                    robot.forward(forward_speed,forward_speed)
-                if current_distance == 0:
+                    robot.forward(forward_speed, forward_speed)
+                    time.sleep(0.8)
+                    robot.stop()
                     return True
 
 
