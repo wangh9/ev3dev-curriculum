@@ -19,6 +19,7 @@ left_motor = ev3.LargeMotor(ev3.OUTPUT_B)
 right_motor = ev3.LargeMotor(ev3.OUTPUT_C)
 arm_motor = ev3.MediumMotor(ev3.OUTPUT_A)
 touch_sensor = ev3.TouchSensor()
+color_sensor = ev3.ColorSensor()
 
 
 class Snatch3r(object):
@@ -189,11 +190,17 @@ class Snatch3r(object):
 
             ev3.Sound.speak("Found " + COLOR_NAMES[color_to_seek]).wait()
 
-    def find_the_target(self,code,state1,state2,state3):
-        while code == 8147:
+    def find_the_target(self,code1,state1,state2,state3):
+        if code1 == 8147:
             if state1 == True and state2 == False and state3 == False:
                 print("go to Olin")
                 ev3.Sound.speak("Olin it is").wait()
+                left_motor.run_forever(speed_sp=600)
+                right_motor.run_forever(speed_sp=600)
+                while (color_sensor.color != 'red'):
+                    time.sleep(0.01)
+                left_motor.stop(stop_action=ev3.Motor.STOP_ACTION_BRAKE)
+                right_motor.stop(stop_action=ev3.Motor.STOP_ACTION_BRAKE)
 
             if state1 == False and state2 == True and state3 == False:
                 print("go to Monech")
@@ -202,3 +209,5 @@ class Snatch3r(object):
             if state1 == False and state2 == False and state3 == True:
                 print("go to Library")
                 ev3.Sound.speak("library it is").wait()
+        else:
+            ev3.Sound.speak("You are a Robot Bob").wait()
