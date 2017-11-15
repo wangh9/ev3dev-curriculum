@@ -6,6 +6,9 @@ def main():
     robot = robo.Snatch3r()
     mqtt_client = com.MqttClient(robot)
     mqtt_client.connect_to_pc()
+    # speed = robot.speed
+    # if speed > 0:
+    #     mqtt_client.send_message("check_off", ["True"])
     robot.loop_forever()
 
 

@@ -183,30 +183,6 @@ class Snatch3r(object):
 
             ev3.Sound.speak("Found " + COLOR_NAMES[color_to_seek]).wait()
 
-    def find_the_target(self,code1,state1,state2,state3):
-        if code1 == 8147:
-            if state1 == True and state2 == False and state3 == False:
-                print("go to Olin")
-                ev3.Sound.speak("Olin it is").wait()
-                time.sleep(1)
-                left_motor.run_forever(speed_sp=600)
-                right_motor.run_forever(speed_sp=600)
-                while (color_sensor.color != "Red"):
-                    time.sleep(0.01)
-                left_motor.stop(stop_action=ev3.Motor.STOP_ACTION_BRAKE)
-                right_motor.stop(stop_action=ev3.Motor.STOP_ACTION_BRAKE)
-
-            if state1 == False and state2 == True and state3 == False:
-                print("go to Monech")
-                ev3.Sound.speak("Monech it is").wait()
-
-            if state1 == False and state2 == False and state3 == True:
-                print("go to Library")
-                ev3.Sound.speak("library it is").wait()
-        else:
-            ev3.Sound.speak("You are a Robot Bob").wait()
-
-
     def find_beacon(self):
         try:
             while True:
@@ -271,3 +247,96 @@ class Snatch3r(object):
 
         self.stop()
         ev3.Sound.speak('Goodbye')
+
+    def drive_to_color1(self,button_state, robot, color_to_seek):
+        COLOR_NAMES = ["None", "Black", "Blue", "Green", "Yellow", "Red", "White", "Brown"]
+        if button_state:
+            robot.forward(600, 600)
+            while (robot.color_sensor.color != color_to_seek):
+                time.sleep(0.01)
+            robot.stop()
+
+    def find_the_target(self,code1,state1,state2,state3):
+        if code1 == 8147:
+            if state1 == True and state2 == False and state3 == False:
+                print("go to Olin")
+                ev3.Sound.speak("Olin it is").wait()
+                time.sleep(1)
+                self.drive_to_color1(touch_sensor, self, 5)
+                ev3.Sound.speak("at intersection").wait()
+                time.sleep(1)
+                self.drive_to_color1(touch_sensor, self, 1)
+                time.sleep(1)
+                ev3.Sound.speak("at Olin")
+                time.sleep(1)
+                self.find_beacon1()
+
+            if state1 == False and state2 == True and state3 == False:
+                print("go to Monech")
+                ev3.Sound.speak("Monech it is").wait()
+                time.sleep(1)
+                self.drive_to_color1(touch_sensor, self, 5)
+                ev3.Sound.speak("at intersection").wait()
+                time.sleep(1)
+
+                left_motor.run_forever(speed_sp=300)
+                right_motor.run_forever(speed_sp=0)
+                while (color_sensor.color != 3):
+                    time.sleep(0.01)
+                self.stop()
+                time.sleep(1)
+
+                left_motor.run_forever(speed_sp=300)
+                right_motor.run_forever(speed_sp=0)
+                time.sleep(0.455)
+                self.stop()
+                self.drive_to_color1(touch_sensor, self, 1)
+                time.sleep(1)
+                ev3.Sound.speak("at Monech")
+                time.sleep(1)
+                self.find_beacon1()
+
+            if state1 == False and state2 == False and state3 == True:
+                print("go to Library")
+                ev3.Sound.speak("library it is").wait()
+                time.sleep(1)
+                self.drive_to_color1(touch_sensor, self, 5)
+                ev3.Sound.speak("at intersection").wait()
+                time.sleep(1)
+
+                left_motor.run_forever(speed_sp=0)
+                right_motor.run_forever(speed_sp=300)
+                while (color_sensor.color != 4):
+                    time.sleep(0.01)
+                self.stop()
+                time.sleep(1)
+
+                left_motor.run_forever(speed_sp=0)
+                right_motor.run_forever(speed_sp=300)
+                time.sleep(0.89)
+                self.stop()
+                self.drive_to_color1(touch_sensor, self, 1)
+                time.sleep(1)
+                ev3.Sound.speak("at Library")
+                time.sleep(1)
+                self.find_beacon1()
+        else:
+            ev3.Sound.speak("You are a Robot Bob").wait()
+
+    def find_beacon1(self):
+        try:
+            while True:
+                found_beacon = self.seek_beacon()
+                if found_beacon:
+                    ev3.Sound.speak("I got Bob")
+                    self.arm_up()
+                    time.sleep(1)
+                    self.arm_down()
+                    break
+        except:
+            ev3.Sound.speak("Error")
+        ev3.Sound.speak("I get Bob")
+        print("Goodbye!")
+
+    def speed (self):
+        return left_motor.speed

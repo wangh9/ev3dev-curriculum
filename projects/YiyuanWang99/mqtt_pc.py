@@ -30,6 +30,10 @@ def main():
     check_state1 = tk.IntVar()
     check_state2 = tk.IntVar()
     check_state3 = tk.IntVar()
+    # text = tk.StringVar()
+    # text.set('Your car is waiting for the command')
+    # if mqtt_client.check_off() == True:
+    #     text.set('Your car is on the way')
 
     main_frame = ttk.Frame(root, padding=50, relief='raised')
     main_frame.grid()
@@ -66,8 +70,8 @@ def main():
     confirm_button.grid(row=4, column=1)
     confirm_button['command'] = (lambda : some_callback1(mqtt_client, int(entry_box.get()),int(check_state1.get()), int(check_state2.get()),int(check_state3.get())))
 
-    answer_lable = ttk.Label(main_frame, text=" ")
-    answer_lable.grid(row=5, column=0)
+    # answer_lable = ttk.Label(main_frame, textvariable=text)
+    # answer_lable.grid(row=5, column=0)
 
     q_button = ttk.Button(main_frame, text="Quit")
     q_button.grid(row=6, column=2)

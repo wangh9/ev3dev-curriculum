@@ -51,8 +51,8 @@ class DataContainer(object):
 def main():
     print("--------------------------------------------")
     print("IR Remote")
-    print(" - Use IR remote channel 1 to drive around")
-    print(" - Use IR remote channel 2 to for the arm")
+    print(" - Use IR remote channel 2 to drive around")
+    print(" - Use IR remote channel 3 to for the arm")
     print(" - Press the Back button on EV3 to exit")
     print("--------------------------------------------")
     ev3.Sound.speak("I R Remote")
@@ -71,8 +71,8 @@ def main():
 
 
     assert touch_sensor
-    rc1 = ev3.RemoteControl(channel=1)
-    rc2 = ev3.RemoteControl(channel=2)
+    rc1 = ev3.RemoteControl(channel=2)
+    rc2 = ev3.RemoteControl(channel=3)
 
     rc1.on_red_up = lambda state: handle_red_up_1(state)
     rc1.on_red_down = lambda state: handle_red_down_1(state)
@@ -97,7 +97,7 @@ def main():
     # been tested and shown to work, then have that person commit their work.  All other team members need to do a
     # VCS --> Update project...
     # Once the library is implemented any team member should be able to run his code as stated in todo3.
-    robot.shutdown(dc.running)
+    robot.shutdown()
 
 # ----------------------------------------------------------------------
 # Event handlers
@@ -149,7 +149,7 @@ def handle_arm_up_button(button_state, robot):
       :type robot: robo.Snatch3r
     """
     if button_state:
-        robot.arm_up(arm_motor,touch_sensor)
+        robot.arm_up()
 
 
 def handle_arm_down_button(button_state, robot):
@@ -161,7 +161,7 @@ def handle_arm_down_button(button_state, robot):
       :type robot: robo.Snatch3r
     """
     if button_state:
-        robot.arm_down(arm_motor)
+        robot.arm_down()
 
 
 def handle_calibrate_button(button_state, robot):
@@ -173,7 +173,7 @@ def handle_calibrate_button(button_state, robot):
       :type robot: robo.Snatch3r
     """
     if button_state:
-        robot.arm_calibration(arm_motor,touch_sensor)
+        robot.arm_calibration()
 
 
 def handle_shutdown(button_state, dc):

@@ -284,3 +284,7 @@ class MqttClient(object):
         self.delegate = None
         self.client.loop_stop()
         self.client.disconnect()
+
+    # def check_off(self,message):
+    #     if message == 'True':
+    #         return True
