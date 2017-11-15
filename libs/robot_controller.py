@@ -14,12 +14,14 @@
 import ev3dev.ev3 as ev3
 import math
 import time
+import mqtt_remote_method_calls as com
 
 left_motor = ev3.LargeMotor(ev3.OUTPUT_B)
 right_motor = ev3.LargeMotor(ev3.OUTPUT_C)
 arm_motor = ev3.MediumMotor(ev3.OUTPUT_A)
 touch_sensor = ev3.TouchSensor()
 color_sensor = ev3.ColorSensor()
+btn = ev3.Button()
 
 
 class Snatch3r(object):
@@ -204,6 +206,7 @@ class Snatch3r(object):
         else:
             ev3.Sound.speak("You are a Robot Bob").wait()
 
+
     def find_beacon(self):
         try:
             while True:
@@ -214,7 +217,57 @@ class Snatch3r(object):
                     time.sleep(1)
                     break
         except:
-            ev3.Sound.speak("Error")
+            ev3.Sound.speak("")
         self.drive_to_color(touch_sensor,self,5)
+        time.sleep(1)
+        ev3.Sound.speak("Please select the way")
+        while True:
+            btn = ev3.Button()
+            if btn.left:
+                left_motor.run_forever(speed_sp=300)
+                while(self.color_sensor.color!=3):
+                    time.sleep(0.01)
+                self.stop()
+                time.sleep(0.5)
+
+                left_motor.run_forever(speed_sp=300)
+                time.sleep(0.25)
+                self.stop()
+                self.drive_to_color(touch_sensor,self,1)
+            elif btn.right:
+                print("Right")
+                right_motor.run_forever(speed_sp = 400)
+                while (self.color_sensor.color != 4):
+                    time.sleep(0.01)
+                self.stop()
+                time.sleep(2)
+                self.drive_to_color(touch_sensor, self, 1)
+                self.arm_down()
+                time.sleep(5)
+                break
+
+            elif btn.up:
+                print("Up")
+                self.drive_to_color(touch_sensor,self,1)
+                self.arm_down()
+                time.sleep(5)
+                break
+
         print("Goodbye!")
 
+    def turn_at_red(self):
+        mqtt_client = com.MqttClient(self)
+        mqtt_client.connect_to_pc()
+        while not touch_sensor.is_pressed:
+            self.pixy.mode = "SIG1"
+
+            if self.pixy.value(3) < 5:
+                self.forward(400, 400)
+                time.sleep(0.01)
+            else:
+                mqtt_client.send_message('display')
+                self.turn_degrees(90,turn_speed_sp=500)
+                time.sleep(0.5)
+
+        self.stop()
+        ev3.Sound.speak('Goodbye')

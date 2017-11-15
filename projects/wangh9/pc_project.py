@@ -2,9 +2,9 @@ import tkinter
 from tkinter import ttk
 
 import mqtt_remote_method_calls as com
+import rosegraphics as rg
 v = 0
 def main():
-
     mqtt_client = com.MqttClient()
     mqtt_client.connect_to_ev3()
     root = tkinter.Tk()
@@ -93,7 +93,7 @@ def say1(mqtt_client):
 
 
 def say2(mqtt_client):
-    mqtt_client.send_message('find_beacon')
+    mqtt_client.send_message('turn_at_red')
 
 
 def some_callback1(mqtt_client,leftspeed,rightspeed):
@@ -135,4 +135,14 @@ def quit_program(mqtt_client, shutdown_ev3):
         mqtt_client.send_message("shutdown")
     mqtt_client.close()
     exit()
+
+def display():
+    # window1 = rg.RoseWindow(600, 500, 'Warning')
+    # circle1 = rg.Circle(rg.Point(300,200),100)
+    # circle1.fill_color = "red"
+    # circle1.attach_to(window1)
+    # window1.render()
+    # window1.close_on_mouse_click()
+    print('received by mqtt: find the color')
+
 main()
